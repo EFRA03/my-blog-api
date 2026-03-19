@@ -1,4 +1,4 @@
-import { Controller, Get, Param, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Param, NotFoundException, Post, Body, Delete } from '@nestjs/common';
 /*
 Como estamos con typescript, es buena práctica definir
 una interfaz para los objetos que vamos a manejar,
@@ -60,5 +60,48 @@ export class UsersController {
       throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     }
     return user;
+  }
+  /*
+  // Método para manejar la solicitud POST /users
+  @Post()
+  createUser(@Body() body: User) {
+    this.users.push(body);
+    return body;
+  }
+  */
+  // Metodo que hace lo anterior pero asigna un id único al nuevo
+  // usuario basado en el id más alto existente.
+  @Post()
+  createUser(@Body() user: User) {
+    const newId = Math.max(...this.users.map((u) => parseInt(u.id))) + 1;
+    user.id = newId.toString();
+    this.users.push(user);
+    return user;
+  }
+
+  /*
+  // Método para manejar la solicitud DELETE /users/:id
+  @Delete(':id')
+  deleteUser(@Param('id') id: string) {
+    this.users = this.users.filter((user) => user.id !== id);
+    return {
+      message: `Usuario con id ${id} eliminado`,
+    };
+  }
+  */
+  // Este metodo hace lo mismo que el anterior pero maneja el caso
+  // en el que no se encuentra un usuario con el id proporcionado.
+  @Delete(':id')
+  deleteUser(@Param('id') id: string) {
+    const position = this.users.findIndex((user) => user.id === id);
+    if (position === -1) {
+      return {
+        message: `Usuario con id ${id} no encontrado`,
+      };
+    }
+    this.users = this.users.filter((user) => user.id !== id);
+    return {
+      message: `Usuario con id ${id} eliminado`,
+    };
   }
 }
