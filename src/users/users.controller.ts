@@ -1,4 +1,4 @@
-import { Controller, Get, Param, NotFoundException, Post, Body, Delete } from '@nestjs/common';
+import { Controller, Get, Param, NotFoundException, Post, Body, Delete, Put } from '@nestjs/common';
 /*
 Como estamos con typescript, es buena práctica definir
 una interfaz para los objetos que vamos a manejar,
@@ -103,5 +103,25 @@ export class UsersController {
     return {
       message: `Usuario con id ${id} eliminado`,
     };
+  }
+
+  // Método para manejar la solicitud PUT /users/:id
+  // Este método actualiza un usuario existente con los
+  // cambios proporcionados
+  @Put(':id')
+  updateUser(@Param('id') id: string, @Body() changes: User) {
+    const position = this.users.findIndex((user) => user.id === id);
+    if (position === -1) {
+      return {
+        message: `Usuario con id ${id} no encontrado`,
+      };
+    }
+    const currentData = this.users[position];
+    const updatedUser = {
+      ...currentData,
+      ...changes,
+    };
+    this.users[position] = updatedUser;
+    return updatedUser;
   }
 }
