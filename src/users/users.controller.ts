@@ -1,4 +1,4 @@
-import { Controller, Get, Param, NotFoundException, Post, Body, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Delete, Put, NotFoundException, UnprocessableEntityException, ForbiddenException } from '@nestjs/common';
 /*
 Como estamos con typescript, es buena práctica definir
 una interfaz para los objetos que vamos a manejar,
@@ -57,7 +57,14 @@ export class UsersController {
   findUser(@Param('id') id: string) {
     const user = this.users.find((user) => user.id === id);
     if (!user) {
+      // (404) lanzamos una excepción NotFoundException si no se
+      // encuentra el usuario
       throw new NotFoundException(`Usuario con id ${id} no encontrado`);
+    }
+    // Consultamos que el id no tiene permisos para acceder a ese usuario, en este caso el id '1'
+    if (user.id === '1') {
+      // (403) Si el usuario tiene id '1', lanzamos una excepción ForbiddenException
+      throw new ForbiddenException(`No tienes permiso para acceder a este usuario`);
     }
     return user;
   }
@@ -95,9 +102,8 @@ export class UsersController {
   deleteUser(@Param('id') id: string) {
     const position = this.users.findIndex((user) => user.id === id);
     if (position === -1) {
-      return {
-        message: `Usuario con id ${id} no encontrado`,
-      };
+      // (404)Si no se encuentra el usuario, lanzamos una excepción NotFoundException
+      throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     }
     this.users = this.users.filter((user) => user.id !== id);
     return {
@@ -112,11 +118,16 @@ export class UsersController {
   updateUser(@Param('id') id: string, @Body() changes: User) {
     const position = this.users.findIndex((user) => user.id === id);
     if (position === -1) {
-      return {
-        message: `Usuario con id ${id} no encontrado`,
-      };
+      // (404)Si no se encuentra el usuario, lanzamos una excepción NotFoundException
+      throw new NotFoundException(`Usuario con id ${id} no encontrado`);
     }
     const currentData = this.users[position];
+    // validar que el email tenga un formato correcto (contenga '@')
+    const email = changes?.email;
+    if (email && !email.includes('@')) {
+      // (422)Si el email no es válido, lanzamos una excepción UnprocessableEntityException
+      throw new UnprocessableEntityException(`El email proporcionado no es válido`);
+    }
     const updatedUser = {
       ...currentData,
       ...changes,
