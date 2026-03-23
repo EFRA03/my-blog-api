@@ -1,4 +1,6 @@
 import { Controller, Get, Param, Post, Body, Delete, Put, NotFoundException, UnprocessableEntityException, ForbiddenException } from '@nestjs/common';
+import { CreateUserDto } from './user.dto';
+
 /*
 Como estamos con typescript, es buena práctica definir
 una interfaz para los objetos que vamos a manejar,
@@ -78,10 +80,34 @@ export class UsersController {
   */
   // Metodo que hace lo anterior pero asigna un id único al nuevo
   // usuario basado en el id más alto existente.
+  /*
   @Post()
   createUser(@Body() user: User) {
     const newId = Math.max(...this.users.map((u) => parseInt(u.id))) + 1;
     user.id = newId.toString();
+    this.users.push(user);
+    return user;
+  }*/
+
+  // Método para manejar la solicitud POST /users con DTO
+  /*
+  @Post()
+  createUser(@Body() body: CreateUserDto) {
+    const newUser = {
+      ...body,
+      id: `${new Date().getTime()}`,
+    };
+    this.users.push(newUser);
+    return newUser;
+  }*/
+
+  @Post()
+  createUser(@Body() userDto: CreateUserDto) {
+    const newId = Math.max(...this.users.map((u) => parseInt(u.id))) + 1;
+    const user = {
+      id: newId.toString(),
+      ...userDto,
+    };
     this.users.push(user);
     return user;
   }
