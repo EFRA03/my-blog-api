@@ -19,7 +19,7 @@ import { Env } from './env.model';
         password: configService.get('POSTGRES_PASSWORD', { infer: true }),
         database: configService.get('POSTGRES_DB', { infer: true }),
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: true, // no usar en datos de producción
       }),
       inject: [ConfigService],
     }),
