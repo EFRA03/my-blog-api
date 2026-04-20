@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Post, Body, Delete, Put, ParseIntPipe } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { CreateUserDto, UpdateUserDto } from './dtos/user.dto';
 import { UsersService } from './users.service';
 @Controller('users')
 export class UsersController {
@@ -13,6 +13,12 @@ export class UsersController {
   @Get(':id')
   findUser(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.getUserById(id);
+  }
+  // Este Endpoint es para obtener el perfil de un usuario por su ID, usando el método
+  // getProfileByUserId del servicio
+  @Get(':id/profile')
+  getProfile(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.getProfileByUserId(id);
   }
 
   @Post()
