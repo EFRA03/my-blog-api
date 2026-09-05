@@ -1,0 +1,15 @@
+root = true                  # Indica que este es el archivo raíz de configuración, no se buscarán otros .editorconfig en carpetas superiores
+
+[*]                          # Aplica las reglas a todos los archivos del proyecto
+indent_style = space         # Usa espacios en lugar de tabulaciones
+indent_size = 2              # Cada nivel de indentación será de 2 espacios
+charset = utf-8              # Define la codificación de caracteres como UTF-8
+trim_trailing_whitespace = true   # Elimina espacios en blanco al final de cada línea
+insert_final_newline = true       # Asegura que cada archivo termine con una nueva línea
+end_of_line = lf             # Usa salto de línea estilo Unix (LF)
+max_line_length = off        # No aplica límite de longitud de línea
+# editorconfig-tools is unable to ignore longs strings or urls
+# (comentario original: explica que la herramienta no puede ignorar cadenas largas o URLs)
+
+[CHANGELOG.md]               # Reglas específicas para el archivo CHANGELOG.md
+indent_size = false          # No aplica indentación automática en este archivo
