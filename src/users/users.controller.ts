@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
@@ -58,12 +58,25 @@ export class UsersController {
     return user;
   }
 
+  /*
 // Endpoint para crear un nuevo usuario
   @Post()
   createUser(@Body() body: User) {
     this.users.push(body);
     return body;
-  } 
+  } */
+
+// Endpoint para crear un nuevo usuario con generación de ID
+  @Post()
+  createUser(@Body() body: User) {
+    const newUser = {
+      ...body,
+      id: `${new Date().getTime()}`, // genera ID automático
+    };
+
+    this.users.push(newUser);
+    return newUser;
+  }
 
 // Endpoint para eliminar un usuario por su ID con manejo de errores si el usuario no se encuentra
   @Delete(':id')
@@ -80,6 +93,25 @@ export class UsersController {
     return { 
       message: 'Usuario eliminado correctamente' 
     };
+  }
+
+// Endpoint para actualizar un usuario por su ID con manejo de 
+// errores si el usuario no se encuentra
+  @Put(':id')
+  updateUser(@Param('id') id: string, @Body() changes: User) {
+    const position = this.users.findIndex((user) => user.id === id);
+    if (position === -1) {
+      return {
+        error: 'Usuario no encontrado',
+      };
+    }
+    const currentData = this.users[position];
+    const updatedUser = {
+      ...currentData,
+      ...changes,
+    };
+    this.users[position] = updatedUser;
+    return updatedUser;
   }
 
 
