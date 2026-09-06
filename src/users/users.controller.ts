@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, NotFoundException, UnprocessableEntityException, ForbiddenException } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
@@ -45,7 +45,7 @@ export class UsersController {
   // @Param es un decorador que nos permite acceder a los parámetros de la ruta, en este caso el ID del usuario
   findUser(@Param('id') id: string) {
     return this.user;
-  }*/
+  }
 
 // Endpoint para obtener un usuario por su ID con manejo de 
 // errores si el usuario no se encuentra
@@ -54,6 +54,31 @@ export class UsersController {
     const user = this.users.find((user) => user.id === id);
     if (!user) {
       return { error: 'Usuario no encontrado' };
+    }
+    return user;
+  }*/
+
+  /*  
+  // Endpoint para obtener un usuario por su ID pero si 
+  // no lo encuentra pone un error de tipo NotFoundException 404
+  @Get(':id')
+  findUser(@Param('id') id: string) {
+    const user = this.users.find((user) => user.id === id);
+    if (!user) {
+      throw new NotFoundException(`Usuario con el id ${id} no encontrado`);
+    }
+    return user;
+  }*/
+
+  @Get(':id')
+  findUser(@Param('id') id: string) {
+    const user = this.users.find((user) => user.id === id);
+    if (!user) {
+      throw new NotFoundException(`Usuario con el id ${id} no encontrado`);
+    }
+    if (user.id === '1') {
+      // Si el usuario tiene el ID 1, lanzamos una excepción de tipo ForbiddenException 403
+      throw new ForbiddenException(`El usuario con id ${id} no puede ser procesado`);
     }
     return user;
   }
@@ -84,9 +109,10 @@ export class UsersController {
     const position = this.users.findIndex((user) => user.id === id);
 
     if (position === -1) {
-      return { 
+      throw new NotFoundException(`Usuario con el id ${id} no encontrado`);
+      /*return { 
         message: 'Usuario no encontrado' 
-      };
+      };*/
     }
 
     this.users.splice(position, 1);
@@ -101,11 +127,21 @@ export class UsersController {
   updateUser(@Param('id') id: string, @Body() changes: User) {
     const position = this.users.findIndex((user) => user.id === id);
     if (position === -1) {
-      return {
+      throw new NotFoundException(`Usuario con el id ${id} no encontrado`);
+      /*return {
         error: 'Usuario no encontrado',
-      };
+      };*/
     }
     const currentData = this.users[position];
+    const email = changes?.email;
+    if (email && !email.includes('@')) {
+      /*return {
+        error: 'El correo electrónico no es valido',
+      };*/
+      // Si el email no es válido, lanzamos una excepción de 
+      // tipo UnprocessableEntityException 422
+      throw new UnprocessableEntityException('El correo electrónico no es valido');
+    }
     const updatedUser = {
       ...currentData,
       ...changes,
