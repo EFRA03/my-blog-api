@@ -1,10 +1,12 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 export class CreateUserDto {
-  @IsString()
+  @IsString({
+    message: 'El nombre debe ser una cadena de texto',
+  })
   @IsNotEmpty()
   name: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: 'El correo electrónico no es válido' })
   @IsNotEmpty()
   email: string;
 }
