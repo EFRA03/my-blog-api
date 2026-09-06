@@ -56,3 +56,98 @@ Content-Type: application/json
 - El controlador principal está en `/users`.
 - Los endpoints pueden probarse con Postman, Insomnia o curl.
 - La API se ejecuta normalmente en el puerto 3000.
+
+## Decoradores
+
+Los decoradores en NestJS se usan para definir rutas, parámetros, validaciones y dependencias dentro de controladores, servicios y módulos.
+
+### Decoradores de controladores
+
+- `@Controller('users')` → marca una clase como controlador y define su prefijo de ruta.
+- `@Get()` → define un endpoint GET.
+- `@Post()` → define un endpoint POST.
+- `@Put()` → define un endpoint PUT.
+- `@Patch()` → define un endpoint PATCH.
+- `@Delete()` → define un endpoint DELETE.
+- `@All()` → define un endpoint para cualquier método HTTP.
+
+### Decoradores de rutas y parámetros
+
+- `@Req()` → obtiene el objeto request completo.
+- `@Res()` → obtiene el objeto response completo.
+- `@Next()` → obtiene el middleware next.
+- `@Param(param?: string)` → obtiene un parámetro de la URL.
+- `@Body()` → obtiene el cuerpo de la petición.
+- `@Query(param?: string)` → obtiene parámetros de query string.
+- `@Headers(name?: string)` → obtiene headers.
+- `@Ip()` → obtiene la IP del cliente.
+- `@HostParam()` → obtiene el parámetro de host.
+- `@Session()` → obtiene la sesión del usuario.
+- `@UploadedFile()` → obtiene un archivo subido.
+- `@UploadedFiles()` → obtiene varios archivos subidos.
+- `@Request()` → alias de `@Req()`.
+- `@Response()` → alias de `@Res()`.
+
+### Decoradores de validación y DTO
+
+- `@UsePipes()` → aplica validadores o transformaciones.
+- `@UseGuards()` → aplica guards de autenticación/autorización.
+- `@UseInterceptors()` → aplica interceptores.
+- `@UseFilters()` → aplica filtros de excepciones.
+
+### Decoradores de módulos y providers
+
+- `@Module({ ... })` → define un módulo de NestJS.
+- `@Injectable()` → marca una clase como servicio y permite inyección de dependencias.
+- `@Inject()` → inyecta una dependencia concreta.
+- `@Optional()` → marca una dependencia como opcional.
+- `@Injectable()` + `@Optional()` → suelen usarse en servicios y providers.
+
+### Decoradores de inyección
+
+- `@Injectable()` → define clases que pueden ser inyectadas.
+- `@Inject(token)` → usa un token específico.
+- `@Optional()` → marca dependencias opcionales.
+
+### Decoradores útiles en este proyecto
+
+En este caso se usan principalmente:
+
+- `@Controller('users')`
+- `@Get()`
+- `@Post()`
+- `@Patch()`
+- `@Delete()`
+- `@Param()`
+- `@Body()`
+
+Ejemplo:
+
+```ts
+@Controller('users')
+export class UsersController {
+  @Get()
+  findAll() {
+    return 'Todos los usuarios';
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return `Usuario ${id}`;
+  }
+
+  @Post()
+  create(@Body() body: any) {
+    return body;
+  }
+}
+```
+
+### Resumen rápido
+
+Los decoradores de NestJS sirven para decirle al framework:
+
+- qué ruta responde el método
+- qué datos vienen por la URL, cuerpo o headers
+- qué clases se comportan como controlador, servicio o módulo
+- qué validaciones, guards e interceptores se aplican

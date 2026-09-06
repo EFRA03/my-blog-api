@@ -39,15 +39,56 @@ export class UsersController {
   getUsers() {
     return this.users;
   }
-// Endpoint para obtener un usuario por su ID
+
+/*// Endpoint para obtener un usuario por su ID
   @Get(':id')
   // @Param es un decorador que nos permite acceder a los parámetros de la ruta, en este caso el ID del usuario
   findUser(@Param('id') id: string) {
-    return this.users.find((user) => user.id === id);
+    return this.user;
+  }*/
+
+// Endpoint para obtener un usuario por su ID con manejo de 
+// errores si el usuario no se encuentra
+  @Get(':id')
+  findUser(@Param('id') id: string) {
+    const user = this.users.find((user) => user.id === id);
+    if (!user) {
+      return { error: 'Usuario no encontrado' };
+    }
+    return user;
   }
 
+// Endpoint para crear un nuevo usuario
+  @Post()
+  createUser(@Body() body: User) {
+    this.users.push(body);
+    return body;
+  } 
+
+// Endpoint para eliminar un usuario por su ID con manejo de errores si el usuario no se encuentra
+  @Delete(':id')
+  deleteUser(@Param('id') id: string) {
+    const position = this.users.findIndex((user) => user.id === id);
+
+    if (position === -1) {
+      return { 
+        message: 'Usuario no encontrado' 
+      };
+    }
+
+    this.users.splice(position, 1);
+    return { 
+      message: 'Usuario eliminado correctamente' 
+    };
+  }
+
+
+
+
+
 // ===================================================
-// grupo de endpoints para la gestión de usuarios utilizando el servicio UsersService
+// grupo de endpoints para la gestión de usuarios utilizando 
+// el servicio UsersService 
 // ===================================================
 /*
   @Post()
