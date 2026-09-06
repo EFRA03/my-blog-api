@@ -93,7 +93,7 @@ export class UsersController {
 
 // Endpoint para crear un nuevo usuario con generación de ID
   @Post()
-  createUser(@Body() body: User) {
+  createUser(@Body() body: CreateUserDto) {
     const newUser = {
       ...body,
       id: `${new Date().getTime()}`, // genera ID automático

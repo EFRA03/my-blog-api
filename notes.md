@@ -151,3 +151,101 @@ Los decoradores de NestJS sirven para decirle al framework:
 - qué datos vienen por la URL, cuerpo o headers
 - qué clases se comportan como controlador, servicio o módulo
 - qué validaciones, guards e interceptores se aplican
+
+## DTOs
+
+Los DTOs (Data Transfer Objects) son objetos que definen la estructura de los datos que entran o salen de la API. Se usan para tipar la información, validar campos y evitar que el backend reciba datos inconsistentes.
+
+### ¿Para qué sirven?
+
+- definir la forma de un cuerpo de petición
+- validar campos obligatorios
+- controlar tipos de datos
+- mantener el código más limpio y organizado
+- separar la estructura de la entidad de la estructura de la petición
+
+### Diferencia entre entidad y DTO
+
+- `Entity`: representa la estructura real de un dato en la base de datos o dominio.
+- `DTO`: representa la estructura de entrada/salida que usa la API.
+
+Ejemplo:
+
+- `User` puede tener campos como id, name, email, createdAt.
+- `CreateUserDto` puede requerir solo `name` y `email` al crear un usuario.
+
+### DTO en este proyecto
+
+En la carpeta `src/users/dto` existen dos archivos importantes:
+
+- `create-user.dto.ts`
+- `update-user.dto.ts`
+
+Estos DTOs definen qué propiedades recibe la API al crear o actualizar un usuario.
+
+### Ejemplo de DTO
+
+```ts
+export class CreateUserDto {
+  name: string;
+  email: string;
+}
+```
+
+Esto significa que, al hacer una petición POST, el cliente debe enviar un JSON con este formato:
+
+```json
+{
+  "name": "Ana Gómez",
+  "email": "ana@example.com"
+}
+```
+
+### Ejemplo de actualización
+
+```ts
+export class UpdateUserDto {
+  name?: string;
+  email?: string;
+}
+```
+
+Aquí los campos son opcionales, porque al actualizar un recurso normalmente no se envían todos los datos.
+
+### Uso en el controlador
+
+```ts
+@Post()
+create(@Body() createUserDto: CreateUserDto) {
+  return this.usersService.create(createUserDto);
+}
+```
+
+El decorador `@Body()` toma el cuerpo de la petición y lo convierte en un objeto del tipo `CreateUserDto`.
+
+### Ventajas de usar DTOs
+
+- mejor validación
+- código más legible
+- menos errores por datos mal formados
+- mejor organización del proyecto
+- facilita el uso de validadores `class-validator`
+
+### Instalación para validación
+
+Si quieres usar DTOs con validaciones reales en NestJS, instala estas dependencias:
+
+```bash
+pnpm add class-validator class-transformer
+```
+
+Estas dos librerías permiten:
+
+- validar campos obligatorios
+- validar tipos
+- transformar datos de entrada
+- trabajar mejor con `@Body()` y DTOs
+
+### Resumen
+
+Un DTO es una "plantilla" para los datos que llegan a la API. En NestJS se usa junto con `@Body()` para definir exactamente qué estructura debe recibir cada endpoint.
