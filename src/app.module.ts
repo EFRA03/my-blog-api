@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
@@ -15,6 +16,12 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       appSecret: 'YOUR_APP_SECRET',
       serviceId: 'my-blog-api',
     }),
+    // Estamos importando el modulo de configuracion para poder 
+    // usar variables de entorno en toda la aplicacion
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
     UsersModule,
   ],
   controllers: [AppController],
