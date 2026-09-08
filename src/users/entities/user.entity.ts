@@ -1,24 +1,49 @@
-import { Entity, PrimaryGeneratedColumn, Column, DeleteDateColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    DeleteDateColumn,
+    CreateDateColumn,
+    UpdateDateColumn
+} from 'typeorm';
+
 @Entity({
     name: 'users',
 })
 export class User {
+
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({type: 'varchar', length: 100})
-    name: string;
-
-    @Column({type: 'varchar', length: 255, unique: true})
+    @Column({
+        type: 'varchar',
+        length: 255,
+        unique: true
+    })
     email: string;
 
-    @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP', name: 'created_at' })
+    @Column({
+        type: 'varchar',
+        length: 255
+    })
+    password: string;
+
+    @CreateDateColumn({
+        type: 'timestamptz',
+        name: 'created_at'
+    })
     createdAt: Date;
 
-    @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP', name: 'updated_at' })
+    @UpdateDateColumn({
+        type: 'timestamptz',
+        name: 'updated_at'
+    })
     updatedAt: Date;
 
-    @DeleteDateColumn({ type: 'timestamptz', name: 'deleted_at' })
+    @DeleteDateColumn({
+        type: 'timestamptz',
+        name: 'deleted_at'
+    })
     deletedAt?: Date;
 }
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
@@ -22,8 +22,8 @@ export class UsersController {
  * @returns Usuario encontrado o excepción si no existe
  */
 @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findOne(+id);
   }
 
 /**
@@ -44,8 +44,8 @@ export class UsersController {
  * @returns Mensaje de confirmación o excepción si no existe
  */
 @Delete(':id')
-  deleteUser(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.delete(id);
   }
 
   /**
@@ -57,7 +57,7 @@ export class UsersController {
  */
 @Patch(':id')
   updateUser(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.usersService.update(id, updateUserDto);
