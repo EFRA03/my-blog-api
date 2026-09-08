@@ -22,7 +22,7 @@ import { Env } from './config/env.model.js';
       password: configService.get('POSTGRES_PASSWORD', { infer: true }),
       database: configService.get('POSTGRES_DB', { infer: true }),
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: true, // peligroso
       }),
       // Estamos inyectando el servicio de configuracion 
       // para poder usar

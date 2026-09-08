@@ -4,8 +4,11 @@ import {
     Column,
     DeleteDateColumn,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
+    OneToOne,
+    JoinColumn
 } from 'typeorm';
+import { Profile } from './profile.entity.js';
 
 @Entity({
     name: 'users',
@@ -45,6 +48,11 @@ export class User {
         name: 'deleted_at'
     })
     deletedAt?: Date;
+
+    // Relacion uno a uno
+    @OneToOne(() => Profile, {nullable: false, cascade: true})
+    @JoinColumn({ name: 'profile_id' }) //llave foranea
+    profile: Profile;
 }
 
 

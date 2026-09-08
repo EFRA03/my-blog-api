@@ -4,8 +4,11 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
-    DeleteDateColumn
+    DeleteDateColumn,
+    OneToOne
 } from 'typeorm';
+
+import { User } from './user.entity.js';
 
 @Entity({
     name: 'profiles',
@@ -52,4 +55,6 @@ export class Profile {
         type: 'timestamptz', 
         name: 'deleted_at' })
     deletedAt?: Date;
+
+    
 }

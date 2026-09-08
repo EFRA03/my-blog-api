@@ -49,10 +49,7 @@ export class UsersService {
 
   async update(id: number, changes: UpdateUserDto) {
     const user = await this.findOne(id);
-    const updatedUser = this.usersRepository.merge({
-      ...user,
-      ...changes,
-    })
+    const updatedUser = this.usersRepository.merge(user, changes);
     return this.usersRepository.save(updatedUser);
   }
 

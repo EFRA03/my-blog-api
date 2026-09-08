@@ -1,4 +1,19 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength, ValidateNested } from 'class-validator';
+
+export class CreateProfileDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  last_name: string;
+
+  @IsString()
+  @IsOptional()
+  avatar: string;
+}
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
@@ -8,4 +23,11 @@ export class CreateUserDto {
   @IsEmail({}, { message: 'El correo electrónico no es válido' })
   @IsNotEmpty()
   email: string;
+
+  @ValidateNested()
+  @Type(() => CreateProfileDto )
+  @IsNotEmpty()
+  profile: CreateProfileDto;
 }
+
+
