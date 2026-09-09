@@ -1,0 +1,28 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { PostsController } from './posts.controller.js';
+import { PostsService } from './posts.service.js';
+import { Post } from './entities/post.entity.js';
+
+describe('PostsController', () => {
+  let controller: PostsController;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [PostsController],
+      providers: [
+        PostsService,
+        {
+          provide: getRepositoryToken(Post),
+          useValue: {},
+        },
+      ],
+    }).compile();
+
+    controller = module.get<PostsController>(PostsController);
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+});
