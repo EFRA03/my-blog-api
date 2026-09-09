@@ -26,6 +26,11 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
 
+@Get(':id/profile')
+getProfile(@Param('id', ParseIntPipe) id:number) {
+  return this.usersService.getProfileByUserId(id);
+}
+
 /**
  * Crea un nuevo usuario.
  * Método POST /users

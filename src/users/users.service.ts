@@ -13,29 +13,33 @@ export class UsersService {
   ) {}
 
   async findAll() {
-    const users = await this.usersRepository.find();
+    const users = await this.usersRepository.find({
+      relations: {
+        profile: true,
+      },
+    });
     return users;
   }
 
   async findOne(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
+      relations: {
+        profile: true,
+      },
     });
-    // Para mensaje de error con id no encontrado
+
     if (!user) {
       throw new NotFoundException(
         `Usuario con el id ${id} no encontrado`,
       );
     }
-
-    // Conserva esto únicamente si es parte de tu ejercicio
-    if (user.id === 1) {
-      throw new ForbiddenException(
-        `El usuario con id ${id} no puede ser procesado`,
-      );
-    }
-
     return user;
+  }
+
+  async getProfileByUserId(id: number) {
+    const user = await this.findOne(id);
+    return user.profile;
   }
 
   async create(body: CreateUserDto) {
@@ -48,17 +52,27 @@ export class UsersService {
   }
 
   async update(id: number, changes: UpdateUserDto) {
-    const user = await this.findOne(id);
-    const updatedUser = this.usersRepository.merge(user, changes);
-    return this.usersRepository.save(updatedUser);
+    try {
+      const user = await this.findOne(id);
+      const updatedUser = this.usersRepository.merge(user, changes);
+      const savedUser = await this.usersRepository.save(updatedUser);
+      return savedUser;
+    } catch {
+      throw new BadRequestException('Error al actualizar el usuario');
+    }
+    
   }
 
   async delete(id: number) {
-    const user = await this.findOne(id);
-    await this.usersRepository.delete(user.id);
-    return {
-      mensaje: `El usuario con el ID ${id} fue eliminado`
-    };
+    try {
+      await this.usersRepository.delete(id);
+        return {
+          mensaje: `El usuario con el ID ${id} fue eliminado`
+        };
+    } catch {
+      throw new BadRequestException('Error al eliminar el usuario');
+    }
+    
   }
 
 }

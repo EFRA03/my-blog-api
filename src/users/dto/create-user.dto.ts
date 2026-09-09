@@ -1,19 +1,7 @@
 import { Type } from 'class-transformer';
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength, ValidateNested } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength, ValidateNested } from 'class-validator';
+import { CreateProfileDto } from './update-profile.dto.js';
 
-export class CreateProfileDto {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-
-  @IsString()
-  @IsNotEmpty()
-  last_name: string;
-
-  @IsString()
-  @IsOptional()
-  avatar: string;
-}
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
