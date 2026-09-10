@@ -16,23 +16,38 @@ export class PostsService {
     private readonly postsRepository: Repository<Post>,
   ) {}
 
-  async create(createPostDto: CreatePostDto) {
+  async create(body: CreatePostDto) {
     try {
-      const newPost = await this.postsRepository.save(createPostDto);
-      return newPost;
+      const { userId, ...postData } = body;
+      const newPost = await this.postsRepository.save({
+        ...postData,
+        user: { id: userId },
+      });
+      return await this.findOne(newPost.id); // anidando
     } catch {
       throw new BadRequestException('Error al crear el post');
     }
   }
 
   async findAll(){
-    const posts = await this.postsRepository.find();
+    const posts = await this.postsRepository.find({
+      relations: {
+        user: {
+          profile: true,
+        },
+      },
+    });
     return posts;
   }
 
   async findOne(id: number) {
     const post = await this.postsRepository.findOne({ 
       where: { id },
+      relations: {
+        user: {
+          profile: true,
+        },
+      },
     });
     if (!post) {
       throw new NotFoundException(`Post con el id ${id} no encontrado`);

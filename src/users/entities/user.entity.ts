@@ -6,9 +6,11 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     OneToOne,
+    OneToMany,
     JoinColumn
 } from 'typeorm';
 import { Profile } from './profile.entity.js';
+import { Post } from '../../posts/entities/post.entity.js';
 
 @Entity({
     name: 'users',
@@ -53,6 +55,10 @@ export class User {
     @OneToOne(() => Profile, {nullable: false, cascade: true})
     @JoinColumn({ name: 'profile_id' }) //llave foranea
     profile: Profile;
+
+    // Un usuario puede tener muchos posts
+    @OneToMany(() => Post, (post) => post.user)
+    posts: Post[];
 }
 
 

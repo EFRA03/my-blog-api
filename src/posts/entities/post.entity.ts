@@ -5,10 +5,11 @@ import {
     DeleteDateColumn,
     CreateDateColumn,
     UpdateDateColumn,
-    OneToOne,
-    JoinColumn
+    ManyToOne,
+    JoinColumn,
 } from 'typeorm';
-
+import { User } from '../../users/entities/user.entity.js';
+import type { Relation } from 'typeorm';
 @Entity()
 export class Post {
     @PrimaryGeneratedColumn()
@@ -47,4 +48,7 @@ export class Post {
     })
     deletedAt?: Date;
 
+    @ManyToOne(() => User, (user) => user.posts, { nullable: false })
+    @JoinColumn({ name: 'user_id' })
+    user: Relation<User>;
 }
