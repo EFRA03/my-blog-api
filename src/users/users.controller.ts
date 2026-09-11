@@ -31,6 +31,11 @@ getProfile(@Param('id', ParseIntPipe) id:number) {
   return this.usersService.getProfileByUserId(id);
 }
 
+@Get(':id/posts')
+getPosts(@Param('id', ParseIntPipe) id: number) {
+  return this.usersService.getPostsByUserId(id);
+}
+
 /**
  * Crea un nuevo usuario.
  * Método POST /users

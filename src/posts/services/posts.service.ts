@@ -30,6 +30,24 @@ export class PostsService {
   }
 
 
+  async getPostsByCategoryId(categoryId: number) {
+    const posts = await this.postsRepository.find({
+      where: {
+        categories: {
+          id: categoryId,
+        },
+      },
+      relations: {
+        user: {
+          profile: true,
+        },
+        categories: true,
+      },
+    });
+
+    return posts;
+  }
+
   async findAll() {
     const posts = await this.postsRepository.find({
       relations: {

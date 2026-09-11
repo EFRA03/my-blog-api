@@ -37,6 +37,20 @@ export class UsersService {
     return user;
   }
 
+  async getPostsByUserId(id: number) {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: {
+        posts: true,
+        profile: true,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return user.posts;
+  }
+
   async getProfileByUserId(id: number) {
     const user = await this.findOne(id);
     return user.profile;
