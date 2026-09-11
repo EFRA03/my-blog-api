@@ -22,6 +22,7 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
     "typeorm": "typeorm-ts-node-esm -d ./src/database/ormconfig.ts",
     "migrations:generate": "npm run typeorm -- migration:generate",
+    "migrations:create": "typeorm-ts-node-esm migration:create",
     "migrations:show": "npm run typeorm -- migration:show",
     "migrations:run": "npm run typeorm -- migration:run"
   },
