@@ -23,7 +23,7 @@ import { PostsModule } from './posts/posts.module.js';
       password: configService.get('POSTGRES_PASSWORD', { infer: true }),
       database: configService.get('POSTGRES_DB', { infer: true }),
       autoLoadEntities: true,
-      synchronize: true, // peligroso
+      synchronize: false, // peligroso en produccion es mejor que este en false
       }),
       // Estamos inyectando el servicio de configuracion 
       // para poder usar
