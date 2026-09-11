@@ -18,42 +18,49 @@ export class PostsService {
 
   async create(body: CreatePostDto) {
     try {
-      const { userId, ...postData } = body;
       const newPost = await this.postsRepository.save({
-        ...postData,
-        user: { id: userId },
+        ...body,
+        user: { id: body.userId },
+        categories: body.categoryIds?.map((id) => ({ id })),
       });
-      return await this.findOne(newPost.id); // anidando
+      return this.findOne(newPost.id);
     } catch {
-      throw new BadRequestException('Error al crear el post');
+      throw new BadRequestException('Error creating post');
     }
   }
 
-  async findAll(){
+
+  async findAll() {
     const posts = await this.postsRepository.find({
       relations: {
         user: {
           profile: true,
         },
+        categories: true,
       },
     });
+
     return posts;
   }
 
   async findOne(id: number) {
-    const post = await this.postsRepository.findOne({ 
+    const post = await this.postsRepository.findOne({
       where: { id },
       relations: {
         user: {
           profile: true,
         },
+        categories: true,
       },
     });
+
     if (!post) {
-      throw new NotFoundException(`Post con el id ${id} no encontrado`);
+      throw new NotFoundException(`Post with id ${id} not found`);
     }
+
     return post;
   }
+
 
   async update(id: number, updatePostDto: UpdatePostDto) {
     try {

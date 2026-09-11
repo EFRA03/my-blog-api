@@ -1,4 +1,5 @@
 import {
+    IsArray,
     IsNotEmpty,
     IsNumber,
     IsOptional,
@@ -25,4 +26,9 @@ export class CreatePostDto {
     @IsNumber()
     @IsNotEmpty()
     userId: number;
+
+    @IsArray()
+    @IsNumber({}, { each: true })
+    @IsOptional()
+    categoryIds?: number[];
 }

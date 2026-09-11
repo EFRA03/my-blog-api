@@ -7,9 +7,12 @@ import {
     UpdateDateColumn,
     ManyToOne,
     JoinColumn,
+    ManyToMany,
+    JoinTable,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity.js';
 import type { Relation } from 'typeorm';
+import { Category } from './category.entity.js';
 @Entity()
 export class Post {
     @PrimaryGeneratedColumn()
@@ -51,4 +54,12 @@ export class Post {
     @ManyToOne(() => User, (user) => user.posts, { nullable: false })
     @JoinColumn({ name: 'user_id' })
     user: Relation<User>;
+
+    @ManyToMany(() => Category, (category) => category.posts)
+    @JoinTable({
+        name: 'posts_categories',
+        joinColumn: { name: 'post_id', referencedColumnName: 'id' },
+        inverseJoinColumn: { name: 'category_id', referencedColumnName: 'id' },
+    })
+    categories: Category[];
 }
