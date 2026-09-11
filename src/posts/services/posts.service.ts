@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreatePostDto } from './dto/create-post.dto.js';
-import { UpdatePostDto } from './dto/update-post.dto.js';
-import { Post } from './entities/post.entity.js';
+import { CreatePostDto } from './../dto/create-post.dto.js';
+import { UpdatePostDto } from './../dto/update-post.dto.js';
+import { Post } from './../entities/post.entity.js';
 
 @Injectable()
 export class PostsService {

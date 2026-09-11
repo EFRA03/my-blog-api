@@ -249,3 +249,22 @@ Estas dos librerías permiten:
 ### Resumen
 
 Un DTO es una "plantilla" para los datos que llegan a la API. En NestJS se usa junto con `@Body()` para definir exactamente qué estructura debe recibir cada endpoint.
+
+## Prompt
+
+Basado en @posts.service.ts y en @posts.controller.ts crea el CRUD para las categorias dentro del modulo @posts.module.ts esta es la estructura:
+
+.
+├── controllers
+│   ├── posts.controller.spec.ts
+│   └── posts.controller.ts
+├── dto
+│   ├── create-post.dto.ts
+│   └── update-post.dto.ts
+├── entities
+│   ├── category.entity.ts
+│   └── post.entity.ts
+├── posts.module.ts
+└── services
+    ├── posts.service.spec.ts
+    └── posts.service.ts
