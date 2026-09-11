@@ -58,8 +58,9 @@ export class UsersService {
 
   async create(body: CreateUserDto) {
     try {
-      const newUser = await this.usersRepository.save(body);
-      return newUser;
+      const newUser = this.usersRepository.create(body); // se ejecuta con el .create y sirve para los hooks
+      const savedUser = await this.usersRepository.save(newUser);
+      return this.findOne(savedUser.id);
     } catch {
       throw new BadRequestException('Error al crear el usuario');
     }

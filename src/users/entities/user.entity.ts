@@ -7,8 +7,10 @@ import {
     UpdateDateColumn,
     OneToOne,
     OneToMany,
-    JoinColumn
+    JoinColumn,
+    BeforeInsert
 } from 'typeorm';
+import * as bcrypt from 'bcrypt'; // para el hashing
 import { Profile } from './profile.entity.js';
 import { Post } from '../../posts/entities/post.entity.js';
 
@@ -59,6 +61,12 @@ export class User {
     // Un usuario puede tener muchos posts
     @OneToMany(() => Post, (post) => post.user)
     posts: Post[];
+
+    // Hooks
+    @BeforeInsert()
+    async hashPassword() {
+        this.password = await bcrypt.hash(this.password, 10)
+    }
 }
 
 
