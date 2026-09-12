@@ -13,6 +13,7 @@ import {
 import * as bcrypt from 'bcrypt'; // para el hashing
 import { Profile } from './profile.entity.js';
 import { Post } from '../../posts/entities/post.entity.js';
+import { Exclude } from 'class-transformer';
 
 @Entity({
     name: 'users',
@@ -29,6 +30,7 @@ export class User {
     })
     email: string;
 
+    @Exclude()
     @Column({
         type: 'varchar',
         length: 255
