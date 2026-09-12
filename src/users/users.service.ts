@@ -90,4 +90,12 @@ export class UsersService {
     
   }
 
+  // metodo de autenticacion
+  async getUserByEmail(email: string) {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+    });
+    return user;
+  }
+
 }
