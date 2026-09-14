@@ -10,7 +10,7 @@ import {
     JoinColumn,
     BeforeInsert
 } from 'typeorm';
-import * as bcrypt from 'bcrypt'; // para el hashing
+import * as bcrypt from 'bcryptjs'; // para el hashing
 import { Profile } from './profile.entity.js';
 import { Post } from '../../posts/entities/post.entity.js';
 import { Exclude } from 'class-transformer';

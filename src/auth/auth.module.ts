@@ -7,6 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy.js';
 // Módulo de usuarios, necesario para consultar datos de la base de usuarios
 import { UsersModule } from './../users/users.module.js';
+import { AuthController } from './controller/auth.controller.js';
 
 @Module({
   // imports: módulos externos que este módulo necesita
@@ -19,5 +20,6 @@ import { UsersModule } from './../users/users.module.js';
     AuthService,     // lógica de autenticación
     LocalStrategy,   // estrategia local de login
   ],
+  controllers: [AuthController],
 })
 export class AuthModule {}
