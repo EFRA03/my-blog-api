@@ -7,6 +7,8 @@ import { JwtModule} from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 // Estrategia local de Passport (usuario/contraseña) integrada con NestJS
 import { LocalStrategy } from './strategies/local.strategy.js';
+
+import { JwtStrategy } from './strategies/jwt.strategy.js';
 // Módulo de usuarios, necesario para consultar datos de la base de usuarios
 import { UsersModule } from './../users/users.module.js';
 import { AuthController } from './controller/auth.controller.js';
@@ -44,6 +46,7 @@ import type { Env } from '../config/env.model.js';
   providers: [
     AuthService,     // lógica de autenticación
     LocalStrategy,   // estrategia local de login
+    JwtStrategy,
   ],
   controllers: [AuthController],
 })
