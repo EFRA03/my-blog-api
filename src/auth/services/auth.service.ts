@@ -1,10 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../../users/users.service.js';
+import type { User } from '../../users/entities/user.entity.js';
+
 import * as bcrypt from 'bcryptjs';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-    constructor(private usersService: UsersService) {}
+    constructor(
+        private usersService: UsersService,
+        private jwtService: JwtService,
+    ) {}
 
     // Valida las credenciales de un usuario por email y contraseña
     async validateUser(email: string, pass: string) {
@@ -22,5 +28,16 @@ export class AuthService {
         }
         // 5. Si coincide, devolver el objeto usuario
         return user;
+    }
+
+    // Recibe un usuario del tipo User y genera un JWT que lo identifica.
+    generateToken(user: User) {
+        // El payload contiene los datos que incluimos en el token.
+        // 'sub' significa 'subject': aquí guarda el ID del usuario al que pertenece el token.
+        const payload = { sub: user.id };
+
+        // sign() firma el payload con la clave configurada y devuelve el JWT como texto.
+        // La firma permite verificar que el contenido no fue alterado; no lo cifra.
+        return this.jwtService.sign(payload);
     }
 }
