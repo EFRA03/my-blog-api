@@ -4,6 +4,7 @@ import type { User } from '../../users/entities/user.entity.js';
 
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { Payload } from '../models/payload.model.js';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +35,7 @@ export class AuthService {
     generateToken(user: User) {
         // El payload contiene los datos que incluimos en el token.
         // 'sub' significa 'subject': aquí guarda el ID del usuario al que pertenece el token.
-        const payload = { sub: user.id };
+        const payload: Payload = { sub: user.id };
 
         // sign() firma el payload con la clave configurada y devuelve el JWT como texto.
         // La firma permite verificar que el contenido no fue alterado; no lo cifra.
